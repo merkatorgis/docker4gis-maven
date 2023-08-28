@@ -1,17 +1,13 @@
 #!/bin/bash
 set -e
 
+src_dir=$1
+shift 1
+
 IMAGE=$IMAGE
-CONTAINER=$CONTAINER
-DOCKER_ENV=$DOCKER_ENV
-RESTART=$RESTART
-NETWORK=$NETWORK
-FILEPORT=$FILEPORT
 VOLUME=$VOLUME
 
-docker container run --restart "$RESTART" --name "$CONTAINER" \
-	-e DOCKER_ENV="$DOCKER_ENV" \
-	-v "$(docker4gis/bind.sh "$FILEPORT" /fileport)" \
-	--mount source="$VOLUME",target=/volume \
-	--network "$NETWORK" \
-	-d "$IMAGE" component_name "$@"
+docker container run --rm \
+	--mount source="$VOLUME",target=/root/.m2 \
+	-v "$(docker4gis/bind.sh "$src_dir" /src)" \
+	"$IMAGE" maven "$@"
