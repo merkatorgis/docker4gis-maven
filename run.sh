@@ -9,5 +9,5 @@ VOLUME=$VOLUME
 
 docker container run --rm \
 	--mount source="$VOLUME",target=/root/.m2 \
-	-v "$(docker4gis/bind.sh "$src_dir" /src)" \
+	--mount type=bind,source="$src_dir",target=/src \
 	"$IMAGE" maven "$@"
